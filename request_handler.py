@@ -1,6 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_all_entries, get_single_entry, delete_entry
+from entries import get_all_entries, get_single_entry, delete_entry, search_entries
+from moods import get_all_moods, get_single_mood
 
 
 # Here's a class. It inherits from another class.
@@ -96,7 +97,19 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_entry(id)}"
                 else:
                     response = f"{get_all_entries()}"
-       
+            if resource == "moods":
+                if id is not None:
+                    response = f"{get_single_mood(id)}"
+                else:
+                    response = f"{get_all_moods()}"
+        
+        elif len(parsed) == 3:
+            (resource, key, value) = parsed
+
+            if resource == "entries":
+                if key == "q":
+                    response = f"{search_entries(value)}"
+
         # This weird code sends a response back to the client
         self.wfile.write(f"{response}".encode())
 
