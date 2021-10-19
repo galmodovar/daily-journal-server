@@ -9,3 +9,4 @@ class Entry():
         self.concept = concept
         self.entry = entry
         self.mood_id = mood_id
+        self.mood = None

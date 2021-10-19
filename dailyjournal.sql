@@ -22,3 +22,13 @@ INSERT INTO `Mood` VALUES (null, "OK");
 INSERT INTO `Mood` VALUES (null, "Frustrated");
 INSERT INTO `Mood` VALUES (null, "Sad");
 
+SELECT
+    a.id,
+    a.date,
+    a.concept,
+    a.entry,
+    a.mood_id,
+    b.mood
+FROM journalentry a
+JOIN mood b
+    ON b.id = a.mood_id

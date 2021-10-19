@@ -1,6 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_all_entries, get_single_entry, delete_entry, search_entries
+from entries import(
+    get_all_entries, get_single_entry, delete_entry, search_entries, create_entry, update_entry)
 from moods import get_all_moods, get_single_mood
 
 
@@ -102,7 +103,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_mood(id)}"
                 else:
                     response = f"{get_all_moods()}"
-        
+
         elif len(parsed) == 3:
             (resource, key, value) = parsed
 
@@ -153,11 +154,19 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
+        success = False
+
         # Delete a single entry from the list
         if resource == "entries":
-            update_entry(id, post_body)
-            # Encode the new animal and send in response
-            self.wfile.write("".encode())
+            success = update_entry(id, post_body)
+
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+        # Encode the new animal and send in response
+        self.wfile.write("".encode())
+
     # Here's a method on the class that overrides the parent's method.
     # It handles any DELETE request.
 
